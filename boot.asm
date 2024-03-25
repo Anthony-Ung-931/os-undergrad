@@ -1,4 +1,4 @@
-[bits 16]
+[bits 16] / 16 bytes from the end
 [org 0x7c00]
 
 KERNEL_ADDRESS equ 0x1000
@@ -85,3 +85,4 @@ DISK_SECTOR_ERROR_MESSAGE db "Read and requested sectors differ", 0
 BOOT_DRIVE db 0
 times 510 - ($-$$) db 0
 dw 0xaa55
+
