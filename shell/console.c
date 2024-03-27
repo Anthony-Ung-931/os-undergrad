@@ -1,13 +1,20 @@
 #include "console.h"
 
+/* The magic address for the VGA Buffer */
 char* const VGA_BUFFER_POS = (char*) 0xb8000;
 char const SPACE = (char) 0x20;
 
+/* The console owns a global variable for its terminal position.
+ * I will make the caller of get_address() responsible for incrementing
+ * 	this global variable. */
 int terminal_pos = 0;
 
+/* Helper function declarations */
 char* get_address();
 int get_next_line();
 
+/* Places a space character in all the addresses that correspond to 
+ * 	text that would be painted on the screen. */
 void clear_terminal() {
 	char* const VGA_BUFFER = VGA_BUFFER_POS;
 	for(int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++) {
@@ -16,8 +23,10 @@ void clear_terminal() {
 	return;
 }
 
+/* Puts a single character on the screen. */
 void print_character(char c) {
 	char* address = get_address();
+
 	/* Suggested to use a switch statement to find the newline character. */
 	switch (c) {
 		case '\n': 
@@ -33,6 +42,7 @@ void print_character(char c) {
 	return;
 }
 
+/* Puts a character on the screen. */
 void print_string(char* str) {
 	char* current_pos;
 	for(int i = 0; str[i] != '\0'; i++) {
@@ -43,18 +53,25 @@ void print_string(char* str) {
 	return;
 }
 
+/* Prints the given string to the screen and then sets the cursor to the next
+ * 	line. */
 void print_line(char* str) {
 	print_string(str);
 	print_character('\n');
 }
 
-/* Gets the address of the character to be written to. */
+/* Gets the address of the character to be written to. 
+ * In the old days, programmers used Macros to write small functions. 
+ * 	This could produce specific buggy behaviours. 
+ * Now, modern compilers automatically do inline substitutions of small
+ * 	functions so code can be more readable for the user without any
+ * 	performance loss. */
 char* get_address() {
 	return (char*) (VGA_BUFFER_POS + terminal_pos * 
 				VGA_BYTES_PER_CHARACTER);
 }
 
-/* Gets the terminal position for the next line. */
+/* Gets the next multiple of 80 from the current terminal position. */
 int get_next_line() {
 	/* Uses integer division to get the next higher multiple of 80. */
 	return (terminal_pos + 80) / 80 * 80;
