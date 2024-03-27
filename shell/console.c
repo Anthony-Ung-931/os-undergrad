@@ -27,17 +27,27 @@ void clear_terminal() {
 void print_character(char c) {
 	char* address = get_address();
 
-	/* Suggested to use a switch statement to find the newline character. */
+	/* Suggested to use a switch statement to find the newline character
+	 * 	so I can extend this switch statement to give special treatment
+	 * 	to other characters. */
 	switch (c) {
 		case '\n': 
 			terminal_pos = get_next_line();
 			break;
 		default: 
-			/* Check if a character is printable. */
+			/* Check if a character is printable. 
+			 * I avoid use of >= to avoid the compiler checking
+			 * 	for two different condition codes. */
 			if((c > (char)(0x1f)) && (c < (char)(0x7f))) {
 				*address = c;
-			}	
-			terminal_pos++; 
+			}
+			else {
+				/* Nonprintable characters get a space
+				 * 	printed in their place. */
+				*address = SPACE;
+			}
+			terminal_pos++;
+			break;
 	}
 	return;
 }
@@ -67,6 +77,13 @@ void print_line(char* str) {
  * 	functions so code can be more readable for the user without any
  * 	performance loss. */
 char* get_address() {
+	/* If the terminal position is out of bounds, I clear the terminal
+	 * 	and reset the terminal position to 0. */
+	if((terminal_pos < 0) || 
+		terminal_pos > ((VGA_WIDTH * VGA_HEIGHT) - 1)) {
+		clear_terminal();
+		terminal_pos = 0;
+	}
 	return (char*) (VGA_BUFFER_POS + terminal_pos * 
 				VGA_BYTES_PER_CHARACTER);
 }
