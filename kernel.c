@@ -1,8 +1,10 @@
 
+#include "console.h"
+
 /* Kernel terminal is 80x25. */
 const int SCREEN_WIDTH = 80;
 const int SCREEN_HEIGHT = 25;
-char* const VGA_BUFFER_POS = (char*) 0xb8000;
+/* char* const VGA_BUFFER_POS = (char*) 0xb8000; */
 
 /*
 void clear_terminal();

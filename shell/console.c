@@ -1,11 +1,12 @@
 #include "console.h"
 
-char* const VGA_BUFFER_POS = (char* 0xb8000);
+char* const VGA_BUFFER_POS = (char*) 0xb8000;
 char const SPACE = (char) 0x20;
 
 int terminal_pos = 0;
 
 char* get_address();
+int get_next_line();
 
 void clear_terminal() {
 	char* const VGA_BUFFER = VGA_BUFFER_POS;
@@ -25,7 +26,7 @@ void print_character(char c) {
 		default: 
 			/* Check if a character is printable. */
 			if((c > (char)(0x1f)) && (c < (char)(0x7f))) {
-				address = c;
+				*address = c;
 			}	
 			terminal_pos++; 
 	}
@@ -36,7 +37,7 @@ void print_string(char* str) {
 	char* current_pos;
 	for(int i = 0; str[i] != '\0'; i++) {
 		current_pos = get_address();
-		*current_pos = str[i]
+		*current_pos = str[i];
 		terminal_pos++;
 	}
 	return;
@@ -44,7 +45,7 @@ void print_string(char* str) {
 
 void print_line(char* str) {
 	print_string(str);
-	print_char('\n');
+	print_character('\n');
 }
 
 /* Gets the address of the character to be written to. */

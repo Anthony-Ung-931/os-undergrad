@@ -34,7 +34,7 @@ kernel-entry.o: kernel-entry.elf
 #  -c - Compile but don't link
 #  $< Output compiled file as kernel.o
 ${O_FILES}: kernel.c
-	gcc -linclude -fno-pie -m32 -ffreestanding -c ${@:.o=.c} -o $@
+	gcc -Iinclude -fno-pie -m32 -ffreestanding -c ${@:.o=.c} -o $@
 
 clean:
 	$(RM) *.o *.bin

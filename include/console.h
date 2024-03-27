@@ -1,6 +1,6 @@
 #ifndef MYOS_INCLUDE_CONSOLE_H
 
-#define MYOS_INCLUDE_CONSOLE.h
+#define MYOS_INCLUDE_CONSOLE_H
 
 	/* Future code will go here */
 
