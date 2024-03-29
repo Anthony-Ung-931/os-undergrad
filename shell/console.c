@@ -20,6 +20,7 @@ void clear_terminal() {
 	for(int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++) {
 		VGA_BUFFER[i * VGA_BYTES_PER_CHARACTER] = SPACE;
 	}
+	terminal_pos = 0;
 	return;
 }
 
@@ -78,11 +79,10 @@ void print_line(char* str) {
  * 	performance loss. */
 char* get_address() {
 	/* If the terminal position is out of bounds, I clear the terminal
-	 * 	and reset the terminal position to 0. */
+	 * 	which also resets the terminal position to 0. */
 	if((terminal_pos < 0) || 
 		terminal_pos > ((VGA_WIDTH * VGA_HEIGHT) - 1)) {
 		clear_terminal();
-		terminal_pos = 0;
 	}
 	return (char*) (VGA_BUFFER_POS + terminal_pos * 
 				VGA_BYTES_PER_CHARACTER);
