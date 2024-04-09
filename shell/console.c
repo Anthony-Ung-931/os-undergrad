@@ -1,7 +1,13 @@
 #include "console.h"
 
+/* The structure for each character: */
+struct character {
+	char value;
+	char color;
+};
+
 /* The magic address for the VGA Buffer */
-char* const VGA_BUFFER_POS = (char*) 0xb8000;
+struct character* const VGA_BUFFER_POS = (struct character*) 0xb8000;
 char const SPACE = (char) 0x20;
 
 /* The console owns a global variable for its terminal position.
@@ -10,15 +16,15 @@ char const SPACE = (char) 0x20;
 int terminal_pos = 0;
 
 /* Helper function declarations */
-char* get_address();
+struct character* get_address();
 int get_next_line();
 
 /* Places a space character in all the addresses that correspond to 
  * 	text that would be painted on the screen. */
 void clear_terminal() {
-	char* const VGA_BUFFER = VGA_BUFFER_POS;
+	terminal_pos = 0;
 	for(int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++) {
-		VGA_BUFFER[i * VGA_BYTES_PER_CHARACTER] = SPACE;
+		print_character(SPACE);
 	}
 	terminal_pos = 0;
 	return;
@@ -26,7 +32,7 @@ void clear_terminal() {
 
 /* Puts a single character on the screen. */
 void print_character(char c) {
-	char* address = get_address();
+	struct character* address = get_address();
 
 	/* Suggested to use a switch statement to find the newline character
 	 * 	so I can extend this switch statement to give special treatment
@@ -40,12 +46,12 @@ void print_character(char c) {
 			 * I avoid use of >= to avoid the compiler checking
 			 * 	for two different condition codes. */
 			if((c > (char)(0x1f)) && (c < (char)(0x7f))) {
-				*address = c;
+				address->value = c;
 			}
 			else {
 				/* Nonprintable characters get a space
 				 * 	printed in their place. */
-				*address = SPACE;
+				address->value = SPACE;
 			}
 			terminal_pos++;
 			break;
@@ -55,11 +61,8 @@ void print_character(char c) {
 
 /* Puts a character on the screen. */
 void print_string(char* str) {
-	char* current_pos;
 	for(int i = 0; str[i] != '\0'; i++) {
-		current_pos = get_address();
-		*current_pos = str[i];
-		terminal_pos++;
+		print_character(str[i]);
 	}
 	return;
 }
@@ -77,15 +80,14 @@ void print_line(char* str) {
  * Now, modern compilers automatically do inline substitutions of small
  * 	functions so code can be more readable for the user without any
  * 	performance loss. */
-char* get_address() {
+struct character* get_address() {
 	/* If the terminal position is out of bounds, I clear the terminal
 	 * 	which also resets the terminal position to 0. */
 	if((terminal_pos < 0) || 
 		terminal_pos > ((VGA_WIDTH * VGA_HEIGHT) - 1)) {
 		clear_terminal();
 	}
-	return (char*) (VGA_BUFFER_POS + terminal_pos * 
-				VGA_BYTES_PER_CHARACTER);
+	return (struct character*) (VGA_BUFFER_POS + terminal_pos);
 }
 
 /* Gets the next multiple of 80 from the current terminal position. */
