@@ -61,6 +61,8 @@ void print_character(char c) {
 
 /* Puts a character on the screen. */
 void print_string(char* str) {
+	/* print_string does not need to do its own address calculations.
+	 * print_character does that. */
 	for(int i = 0; str[i] != '\0'; i++) {
 		print_character(str[i]);
 	}
@@ -93,5 +95,5 @@ struct character* get_address() {
 /* Gets the next multiple of 80 from the current terminal position. */
 int get_next_line() {
 	/* Uses integer division to get the next higher multiple of 80. */
-	return (terminal_pos + 80) / 80 * 80;
+	return (terminal_pos + VGA_WIDTH) / VGA_WIDTH * VGA_WIDTH;
 }
