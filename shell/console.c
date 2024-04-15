@@ -15,6 +15,13 @@ char const SPACE = (char) 0x20;
  * 	this global variable. */
 int terminal_pos = 0;
 
+/* Globals for the background color */
+	static VGA_Color terminal_font_color = LIGHT_GRAY; 
+		// Default font color will be light gray
+	static VGA_Color terminal_background_color = BLACK; 
+		// Default background color is black
+
+
 /* Helper function declarations */
 struct character* get_address();
 int get_next_line();
