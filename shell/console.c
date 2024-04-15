@@ -3,7 +3,7 @@
 /* The structure for each character: */
 struct character {
 	char value;
-	char color;
+	char style;
 };
 
 /* The magic address for the VGA Buffer */
@@ -62,6 +62,7 @@ void print_character_with_color
 			 * 	for two different condition codes. */
 			if((c > (char)(0x1f)) && (c < (char)(0x7f))) {
 				address->value = c;
+				address->style = (bg_color << 4) | font_color;
 			}
 			else {
 				/* Nonprintable characters get a space
@@ -87,7 +88,7 @@ void print_string_with_color(
 	/* print_string does not need to do its own address calculations.
 	 * print_character does that. */
 	for(int i = 0; str[i] != '\0'; i++) {
-		print_character(str[i]);
+		print_character_with_color(str[i], bg_color, font_color);
 	}
 	return;
 }
