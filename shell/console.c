@@ -37,8 +37,16 @@ void clear_terminal() {
 	return;
 }
 
-/* Puts a single character on the screen. */
+
 void print_character(char c) {
+	print_character_with_color
+		(c, terminal_background_color, terminal_font_color);
+}
+
+/* Puts a single character on the screen. */
+void print_character_with_color
+	(char c, VGA_Color bg_color, VGA_Color font_color) 
+{
 	struct character* address = get_address();
 
 	/* Suggested to use a switch statement to find the newline character
@@ -68,6 +76,14 @@ void print_character(char c) {
 
 /* Puts a character on the screen. */
 void print_string(char* str) {
+	print_string_with_color
+		(str, terminal_background_color, terminal_font_color);
+}
+
+
+void print_string_with_color(
+	char* str, VGA_Color bg_color, VGA_Color font_color) 
+{
 	/* print_string does not need to do its own address calculations.
 	 * print_character does that. */
 	for(int i = 0; str[i] != '\0'; i++) {
@@ -79,8 +95,16 @@ void print_string(char* str) {
 /* Prints the given string to the screen and then sets the cursor to the next
  * 	line. */
 void print_line(char* str) {
-	print_string(str);
-	print_character('\n');
+	print_line_with_color
+		(str, terminal_background_color, terminal_font_color);
+}
+
+
+void print_line_with_color
+	(char* str, VGA_Color bg_color, VGA_Color font_color) 
+{
+	print_string_with_color(str, bg_color, font_color);
+	print_character_with_color('\n', bg_color, font_color);
 }
 
 /* Gets the address of the character to be written to. 
@@ -103,4 +127,12 @@ struct character* get_address() {
 int get_next_line() {
 	/* Uses integer division to get the next higher multiple of 80. */
 	return (terminal_pos + VGA_WIDTH) / VGA_WIDTH * VGA_WIDTH;
+}
+
+void set_terminal_font_color(VGA_Color col) {
+	terminal_font_color = col;
+}
+
+void set_terminal_background_color(VGA_Color col) {
+	terminal_background_color = col;
 }

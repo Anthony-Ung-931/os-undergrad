@@ -82,7 +82,7 @@ begin_32bit:
 	mov esp, ebp
 	jmp KERNEL_ADDRESS	; Jumps to kernel address in kernel-entry.elf
 
-NUM_SECTORS db 0x09
+NUM_SECTORS db 0x16
 DISK_SUCCESS_MESSAGE db "Read succeeded, continuing", 0
 DISK_READ_ERROR_MESSAGE db "Problem with disk read", 0
 DISK_SECTOR_ERROR_MESSAGE db "Read and requested sectors differ", 0
