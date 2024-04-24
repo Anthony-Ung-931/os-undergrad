@@ -23,7 +23,7 @@ kernel.bin: kernel-entry.o ${O_FILES}
 
 # elf - Assemble in an ELF format and name it kernel-entry.o
 kernel-entry.o: kernel-entry.elf
-		nasm $< -f elf -o $@
+	nasm $< -f elf -o $@
 
 # Creates a Kernel object file
 # gcc - Compiler
