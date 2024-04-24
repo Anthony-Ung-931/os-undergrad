@@ -17,9 +17,7 @@ static int terminal_pos = 0;
 
 /* Globals for the background color */
 static VGA_Color terminal_font_color = LIGHT_GRAY; 
-// Default font color will be light gray
 static VGA_Color terminal_background_color = BLACK; 
-// Default background color is black
 
 
 /* Helper function declarations */
@@ -31,7 +29,7 @@ int get_next_line();
 void clear_terminal() {
 	terminal_pos = 0;
 	for(int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++) {
-		print_character(SPACE);
+		print_character_with_color(SPACE, BLACK, LIGHT_GRAY);
 	}
 	terminal_pos = 0;
 	return;
