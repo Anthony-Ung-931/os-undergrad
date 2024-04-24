@@ -13,13 +13,13 @@ char const SPACE = (char) 0x20;
 /* The console owns a global variable for its terminal position.
  * I will make the caller of get_address() responsible for incrementing
  * 	this global variable. */
-int terminal_pos = 0;
+static int terminal_pos = 0;
 
 /* Globals for the background color */
-	static VGA_Color terminal_font_color = LIGHT_GRAY; 
-		// Default font color will be light gray
-	static VGA_Color terminal_background_color = BLACK; 
-		// Default background color is black
+static VGA_Color terminal_font_color = LIGHT_GRAY; 
+// Default font color will be light gray
+static VGA_Color terminal_background_color = BLACK; 
+// Default background color is black
 
 
 /* Helper function declarations */
