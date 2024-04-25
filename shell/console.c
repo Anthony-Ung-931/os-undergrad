@@ -1,6 +1,11 @@
 #include "console.h"
+#include "stdint.h"
+#include "portmap.h"
 
-/* The structure for each character: */
+/*	The structure for each character: 
+	Value and style must be in this order so the compiler can determine the offset
+		correctly.
+*/
 struct character {
 	char value;
 	char style;
@@ -23,6 +28,7 @@ static VGA_Color terminal_background_color = BLACK;
 /* Helper function declarations */
 struct character* get_address();
 int get_next_line();
+void update_cursor();
 
 /* Places a space character in all the addresses that correspond to 
  * 	text that would be painted on the screen. */
@@ -32,6 +38,7 @@ void clear_terminal() {
 		print_character_with_color(SPACE, BLACK, LIGHT_GRAY);
 	}
 	terminal_pos = 0;
+	update_cursor();
 	return;
 }
 
@@ -70,6 +77,8 @@ void print_character_with_color
 			terminal_pos++;
 			break;
 	}
+	/* Update the cursor regardless of what character was printed. */
+	update_cursor();
 	return;
 }
 
@@ -134,4 +143,12 @@ void set_terminal_font_color(VGA_Color col) {
 
 void set_terminal_background_color(VGA_Color col) {
 	terminal_background_color = col;
+}
+
+void update_cursor() {
+     uint16_t cursor_position = terminal_pos;
+     outb(0x3D4, 0x0F);
+     outb(0x3D5, (uint8_t) (cursor_position));
+     outb(0x3D4, 0x0E);
+     outb(0x3D5, (uint8_t) (cursor_position >> 8));
 }

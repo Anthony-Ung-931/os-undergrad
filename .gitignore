@@ -5,3 +5,5 @@ kernel.o
 os.bin
 
 /shell/console.o
+/device/keyboard.o
+/device/portmap/portmap.o
