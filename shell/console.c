@@ -13,8 +13,8 @@ struct character {
 };
 
 /* The magic address for the VGA Buffer */
-struct character* const VGA_BUFFER_POS = (struct character*) 0xb8000;
-char const SPACE = (char) 0x20;
+static struct character* const VGA_BUFFER_POS = (struct character*) 0xb8000;
+static char const SPACE = (char) 0x20;
 
 /* The console owns a global variable for its terminal position.
  * I will make the caller of get_address() responsible for incrementing
@@ -26,10 +26,11 @@ static VGA_Color terminal_font_color = LIGHT_GRAY;
 static VGA_Color terminal_background_color = BLACK; 
 
 
-/* Helper function declarations */
-struct character* get_address();
-int get_next_line();
-void update_cursor();
+/* Helper function declarations 
+ * All static because I do not want to expose these functions to the outside. */
+static struct character* get_address();
+static int get_next_line();
+static void update_cursor();
 
 /* Places a space character in all the addresses that correspond to 
  * 	text that would be painted on the screen. */
@@ -83,7 +84,7 @@ void print_character_with_color
 	return;
 }
 
-/* Puts a character on the screen. */
+/* Puts a string on the screen. */
 void print_string(char* str) {
 	print_string_with_color
 		(str, terminal_background_color, terminal_font_color);
@@ -122,7 +123,7 @@ void print_line_with_color
  * Now, modern compilers automatically do inline substitutions of small
  * 	functions so code can be more readable for the user without any
  * 	performance loss. */
-struct character* get_address() {
+static struct character* get_address() {
 	/* If the terminal position is out of bounds, I clear the terminal
 	 * 	which also resets the terminal position to 0. */
 	if((terminal_pos < 0) || 
@@ -133,7 +134,7 @@ struct character* get_address() {
 }
 
 /* Gets the next multiple of 80 from the current terminal position. */
-int get_next_line() {
+static int get_next_line() {
 	/* Uses integer division to get the next higher multiple of 80. */
 	return (terminal_pos + VGA_WIDTH) / VGA_WIDTH * VGA_WIDTH;
 }
@@ -146,7 +147,7 @@ void set_terminal_background_color(VGA_Color col) {
 	terminal_background_color = col;
 }
 
-void update_cursor() {
+static void update_cursor() {
      uint16_t cursor_position = terminal_pos;
      outb(0x3D4, 0x0F);
      outb(0x3D5, (uint8_t) (cursor_position));
