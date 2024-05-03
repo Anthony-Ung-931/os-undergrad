@@ -33,7 +33,7 @@
 	void print_string(char* str);
 	void print_line(char* str);
 
-	/* Function */
+	/* Functions to support color printing */
 	void print_character_with_color
 		(char c, VGA_Color bg_color, VGA_Color font_color);
 	void print_string_with_color

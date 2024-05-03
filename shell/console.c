@@ -1,5 +1,6 @@
+#include <stdint.h>
+
 #include "console.h"
-#include "stdint.h"
 #include "portmap.h"
 
 /*	The structure for each character: 

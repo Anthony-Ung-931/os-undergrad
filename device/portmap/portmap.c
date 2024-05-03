@@ -1,5 +1,6 @@
+#include <stdint.h>
+
 #include "portmap.h"
-#include "stdint.h"
 
 /* Inline asm is bad practice. Instead, make a procedure call to a .s file. */
 

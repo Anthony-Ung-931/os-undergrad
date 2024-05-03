@@ -1,8 +1,8 @@
 
+#include <stdint.h>
+
 #include "console.h"
-#include "stdint.h"
 #include "keyboard.h"
-#include "portmap.h"
 
 void main() {
 	
