@@ -1,4 +1,6 @@
-C_FILES=./kernel.c ./shell/console.c ./device/keyboard.c ./device/portmap/portmap.c
+C_FILES=./kernel.c ./shell/console.c \
+./device/keyboard/keyboard.c ./device/portmap/portmap.c
+
 O_FILES = ${C_FILES:.c=.o}
 
 all: qemu_launch
